@@ -70,6 +70,8 @@ test('outside certificate without CEP adds nothing to California', () => {
 test('counts-toward labels', () => {
   assert.deepEqual(countsToward({ fl: 'medErrors', ca: true }).map((t) => t.label), ['Florida · Medical Errors', 'California']);
   assert.deepEqual(countsToward({ fl: 'general', ca: false }).map((t) => t.label), ['Florida · general']);
+  assert.equal(countsToward({ fl: 'medErrors', ca: true })[0].required, true);
+  assert.equal(countsToward({ fl: 'dv', ca: true })[0].required, false); // not due this cycle
 });
 
 test('days until a deadline and BLS end-of-month expiry', () => {
@@ -80,7 +82,7 @@ test('days until a deadline and BLS end-of-month expiry', () => {
   assert.equal(exp.getDate(), 30);
 });
 
-test('every rule keeps an official source link', () => {
+test('every rule links to a source on an official host', () => {
   const official = /^https:\/\/(floridasnursing\.gov|cebroker\.com|rn\.ca\.gov|www\.nursingworld\.org|email\.nursingworld\.org|cpr\.heart\.org|www\.nursecompact\.com)\//;
   assert.deepEqual(RULE_SOURCES.map((r) => r.id), ['fl-rn', 'fl-reporting', 'fl-groups', 'ca-rn', 'compact', 'awarding', 'bls']);
   for (const r of RULE_SOURCES) {

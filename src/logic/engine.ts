@@ -104,7 +104,7 @@ export function countsToward(c: { fl: Course['fl']; ca: boolean }): CountsTag[] 
   if (c.fl) {
     const r = FL.reqs.find((x) => x.key === c.fl);
     const label = c.fl === 'general' ? 'Florida · general' : r ? `Florida · ${r.short}` : c.fl === 'dv' ? 'Florida · Domestic Violence' : 'Florida';
-    out.push({ state: 'FL', label, required: c.fl !== 'general' });
+    out.push({ state: 'FL', label, required: !!r && c.fl !== 'general' }); // only topics due this cycle
   }
   if (c.ca) out.push({ state: 'CA', label: 'California', required: false });
   return out;
