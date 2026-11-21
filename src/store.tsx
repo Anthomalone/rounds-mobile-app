@@ -16,7 +16,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<Store>(
     () => ({
       certs,
-      addCert: (c) => setCerts((prev) => [...prev, c]),
+      // Same id, or the same Rounds course twice, never counts twice.
+      addCert: (c) => setCerts((prev) => (prev.some((x) => x.id === c.id || (!!c.course && x.course === c.course)) ? prev : [...prev, c])),
       updateCert: (id, patch) => setCerts((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c))),
     }),
     [certs],
