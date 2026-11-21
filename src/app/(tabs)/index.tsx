@@ -1,12 +1,13 @@
 // Home: both licenses, missing topics, the shortest path and what needs attention.
 import { router, type Href } from 'expo-router';
+import type React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Gauge } from '@/components/gauge';
 import { Body, Button, Callout, Card, Chip, Divider, Eyebrow, H1, H2, H3, HatchBar, Muted, Num, Row, Screen, Small } from '@/components/ui';
 import { NURSE, PROVIDERS } from '@/data/catalog';
 import { CA, FL } from '@/data/rules';
 import { caStatus, countsToward, daysUntil, flStatus, shortestPath } from '@/logic/engine';
-import { fmtDate, fmtLongDay } from '@/lib/format';
+import { daysLabel, fmtDate, fmtLongDay } from '@/lib/format';
 import { useStore } from '@/store';
 import { C, F, R, S } from '@/theme';
 
@@ -77,10 +78,17 @@ export default function Home() {
       </Card>
 
       {/* F3: right hours, wrong topics */}
-      {general.raw > general.need && fl.missingTopics.length > 0 && (
-        <Callout tone="warn" title="Enough Florida hours, but not the right ones">
+      {fl.missingTopics.length > 0 && (
+        <Callout tone="warn" title={fl.generalFull ? 'Enough Florida hours, but not the right ones' : 'Florida required topics missing'}>
           <Small>
-            Your general hours are full ({general.raw} done, {general.need} needed), but extra general hours don’t replace required topics. You still need{' '}
+            {fl.generalFull ? (
+              <>
+                Your general hours are full (<Text style={styles.mono}>{general.raw}</Text> done, <Text style={styles.mono}>{general.need}</Text> needed), but extra general hours don’t replace required topics.{' '}
+              </>
+            ) : (
+              'General hours don’t replace required topics. '
+            )}
+            You still need{' '}
             <Text style={{ fontFamily: F.semibold, color: C.ink }}>{fl.missingTopics.map((r) => r.label).join(' and ')}</Text>.
           </Small>
         </Callout>
@@ -90,7 +98,7 @@ export default function Home() {
       <Card>
         <Row style={{ justifyContent: 'space-between' }}>
           <H2>Your courses, in order</H2>
-          {path.complete ? <Chip label="Complete" tone="ok" /> : <Chip label={`${path.courses.length} · ${path.hours} h`} tone="FL" />}
+          {path.complete ? <Chip label="Complete" tone="ok" /> : <Chip label={`${path.courses.length} courses · ${path.hours} h`} tone="plain" />}
         </Row>
         <Muted>Required topics first, then the courses that close both gaps fastest.</Muted>
         {path.complete ? (
@@ -102,14 +110,15 @@ export default function Home() {
               <View style={{ flex: 1, gap: 6 }}>
                 <H3>{c.title}</H3>
                 <Muted>
-                  {c.hours} h · {c.prov ? PROVIDERS[c.prov].name : ''} · self-paced
+                  <Text style={styles.mono}>{c.hours} h</Text> · {c.prov ? PROVIDERS[c.prov].name : ''} · self-paced
                 </Muted>
                 <Row style={{ flexWrap: 'wrap', gap: 6 }}>
                   {countsToward(c).map((t) => <Chip key={t.label} label={t.label} tone={t.state} />)}
                 </Row>
                 <Button
-                  label={i === 0 ? 'Start' : 'Open'}
-                  kind={i === 0 ? 'primary' : 'ghost'}
+                  label="Open"
+                  kind="ghost"
+                  accessibilityLabel={`Open ${c.title}`}
                   onPress={() => router.push(`/courses/${c.id}` as Href)}
                   style={{ alignSelf: 'flex-start', paddingVertical: 9 }}
                 />
@@ -127,7 +136,11 @@ export default function Home() {
         )}
         <Alert
           tone={blsDays < 90 ? 'bad' : 'warn'}
-          title={`BLS card expires in ${blsDays} days`}
+          title={
+            blsDays < 0 ? 'BLS card expired' : blsDays === 0 ? 'BLS card expires today' : (
+              <>BLS card expires in <Text style={styles.mono}>{daysLabel(blsDays)}</Text></>
+            )
+          }
           body={`Expires ${fmtDate(NURSE.blsExpires)}. Your employer requires a valid card to work shifts.`}
           action="Start renewal"
           to="/bls"
@@ -145,7 +158,7 @@ export default function Home() {
           <ReqRow key={r.key} label={r.label} note={r.note} have={r.raw} need={r.need} />
         ))}
         {FL.info.map((x) => <InfoRow key={x.label} label={x.label} note={x.note} />)}
-        <Muted>Hours are reported to CE Broker, the state tracking system.</Muted>
+        <Muted>Florida tracks completed hours in CE Broker, the state tracking system.</Muted>
       </Card>
       <Card>
         <Row>
@@ -186,7 +199,7 @@ function LicenseTile(p: { code: string; name: string; license: string; expires: 
       <View style={{ gap: 4 }}>
         <Text style={[styles.tileSub, { color: ink }]}>Renew by</Text>
         <Num style={{ fontSize: 13, color: ink }}>{fmtDate(p.expires)}</Num>
-        <View style={styles.pillDark}><Num style={{ color: '#fff', fontSize: 12 }}>{p.complete ? 'Ready' : `${days} days`}</Num></View>
+        <View style={styles.pillDark}><Num style={{ color: '#fff', fontSize: 12 }}>{days < 0 ? 'Expired' : p.complete ? `Ready · ${daysLabel(days)}` : daysLabel(days)}</Num></View>
       </View>
     </Card>
   );
@@ -223,7 +236,7 @@ function InfoRow({ label, note }: { label: string; note: string }) {
   );
 }
 
-function Alert({ tone, title, body, action, to }: { tone: 'warn' | 'bad' | 'info'; title: string; body: string; action: string; to: Href }) {
+function Alert({ tone, title, body, action, to }: { tone: 'warn' | 'bad' | 'info'; title: React.ReactNode; body: string; action: string; to: Href }) {
   const dot = { warn: C.warn, bad: C.bad, info: C.info }[tone];
   return (
     <>
@@ -261,4 +274,5 @@ const styles = StyleSheet.create({
   alert: { flexDirection: 'row', gap: S.md, alignItems: 'flex-start' },
   alertDot: { width: 10, height: 10, borderRadius: 5, marginTop: 5 },
   link: { fontFamily: F.semibold, fontSize: 13, color: C.ink, marginTop: 4 },
+  mono: { fontFamily: F.mono },
 });

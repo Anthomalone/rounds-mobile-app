@@ -10,3 +10,10 @@ export function fmtDate(d: string | Date): string {
 export function fmtLongDay(d: Date): string {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 }
+
+/** Days left before a deadline, never negative: "160 days", "1 day", "Due today", "Expired". */
+export function daysLabel(days: number): string {
+  if (days < 0) return 'Expired';
+  if (days === 0) return 'Due today';
+  return days === 1 ? '1 day' : `${days} days`;
+}
