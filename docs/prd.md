@@ -42,7 +42,7 @@ From the user stories in the handoff (US-1 to US-3):
 
 ## Constraints
 
-- Phone first. Platform not chosen yet: native iOS (SwiftUI), cross-platform (React Native / Expo) or an installable web app (PWA). See Open questions.
+- Phone first, built with Expo / React Native (decided 21 Nov 2026). Shown in Expo Go on a phone and in a web browser at phone width.
 - Made-up people, providers and numbers only. No real nurse data. License numbers masked in the UI.
 - State rules keep their source link and the verification date (21 Nov 2026); no invented rules.
 - AI certificate reading and CE Broker reporting stay simulated and are labelled as simulated.
@@ -59,9 +59,9 @@ All sample data from handoff section 7, kept on the device: providers, the Round
 
 ## Open questions
 
-1. **Platform:** native iOS (SwiftUI), React Native / Expo, or an installable web app (PWA)? This changes how the app is built and how you demo it (simulator, TestFlight, or a link).
-2. **Manager view:** leave it out of the mobile app (stays in the web prototype), or include a phone version of Carla's team list? I have put it under "later".
+1. ~~Platform~~ Decided 21 Nov 2026: Expo / React Native.
+2. ~~Manager view~~ Decided 21 Nov 2026: later; stays in the web prototype for v1.
 3. **Spec view:** the web prototype has a Spec tab (user stories, ticket, rules and sources). Does the mobile app need it, or is a "Rules & sources" screen enough? I have kept only the rule sources inside the app.
-4. **Mobile-only extras** (camera capture of certificates, push reminders, offline lessons, calendar add, Wallet pass, Face ID): which, if any, belong in v1? I have put them all under "later".
+4. ~~Mobile-only extras~~ Decided 21 Nov 2026: all later.
 5. **Saved progress:** should course progress and new certificates stay after closing the app, and should there be a "reset demo" button for interviews?
 6. **Which courses are playable:** the handoff has full content only for Prevention of Medical Errors. Do the other catalog courses need lessons too, or a short "demo: mark as complete" step?
