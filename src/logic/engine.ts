@@ -57,7 +57,7 @@ export function caStatus(certs: Cert[]): CaStatus {
 
 export const completedCourseIds = (certs: Cert[]) => certs.map((c) => c.course).filter((x): x is string => !!x);
 
-export type Path = { courses: Course[]; hours: number; complete: boolean };
+export type Path = { courses: Course[]; hours: number; complete: boolean; uncovered: string[] };
 
 export function shortestPath(certs: Cert[]): Path {
   const fl = flStatus(certs);
@@ -89,7 +89,12 @@ export function shortestPath(certs: Cert[]): Path {
     if (c.fl === 'general') flGeneralLeft -= c.hours;
   }
 
-  return { courses: plan, hours: plan.reduce((a, c) => a + c.hours, 0), complete: plan.length === 0 };
+  // Gaps the catalog cannot close are reported, never hidden behind "Complete".
+  const uncovered: string[] = fl.missingTopics.filter((r) => !plan.some((c) => c.fl === r.key)).map((r) => r.label);
+  if (flGeneralLeft > 0) uncovered.push('Florida general hours');
+  if (caLeft > 0) uncovered.push('California hours');
+  const complete = fl.complete && caStatus(certs).complete;
+  return { courses: plan, hours: plan.reduce((a, c) => a + c.hours, 0), complete, uncovered };
 }
 
 export type CountsTag = { state: 'FL' | 'CA'; label: string; required: boolean };
