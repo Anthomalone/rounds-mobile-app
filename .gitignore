@@ -1,0 +1,14 @@
+# secrets
+.env*
+!.env.example
+
+# dependencies and builds
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+.DS_Store
+
+# review scratch
+.review/
