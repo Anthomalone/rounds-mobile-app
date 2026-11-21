@@ -33,14 +33,15 @@ export function Card({ children, style, tone }: { children: ReactNode; style?: S
 }
 
 type BtnKind = 'primary' | 'ghost' | 'mint' | 'quiet' | 'light';
-export function Button({ label, onPress, kind = 'primary', disabled, style, icon, accessibilityHint }: {
-  label: string; onPress: () => void; kind?: BtnKind; disabled?: boolean; style?: StyleProp<ViewStyle>; icon?: string; accessibilityHint?: string;
+export function Button({ label, onPress, kind = 'primary', disabled, style, icon, accessibilityHint, accessibilityLabel }: {
+  label: string; onPress: () => void; kind?: BtnKind; disabled?: boolean; style?: StyleProp<ViewStyle>; icon?: string; accessibilityHint?: string; accessibilityLabel?: string;
 }) {
   const bg = { primary: C.ink, ghost: C.surface, mint: C.mint, quiet: 'transparent', light: C.surface }[kind];
   const fg = { primary: '#fff', ghost: C.ink, mint: C.mintInk, quiet: C.ink2, light: C.ink }[kind];
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       accessibilityState={{ disabled: !!disabled }}
       accessibilityHint={accessibilityHint}
       disabled={disabled}

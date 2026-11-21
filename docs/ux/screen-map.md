@@ -11,6 +11,8 @@ One row per screen (v1, nurse side). Each screen is judged against its row, on a
 | `/bls` | form flow | Nurse | Renew the BLS card before it expires | The 4-step progress and the current step (online part, skills session, instructor pass, new eCard) | The current step's one button (Start online part / Book this session / Instructor pass (simulated) / Done) | Pick a different session, go back | empty, loading, error, leaving Rounds (online part), booked, new eCard issued |
 | `/rules` | detail | Nurse | Check where each rule comes from | Each Florida and California rule with its source link and "checked 21 Nov 2026" | Open source (link) | Back | empty, loading, error |
 
+In v1 all data is local and fixed, so loading and error states cannot occur yet; they apply once real data arrives (decision of 21 Nov 2026, Home review).
+
 Hidden on every screen: real names or license numbers (license number always masked, for example •••4821), any "send" that happens without approval.
 
 ## Users and access
