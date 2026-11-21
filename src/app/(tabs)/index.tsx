@@ -12,12 +12,12 @@ import { useStore } from '@/store';
 import { C, F, R, S } from '@/theme';
 
 export default function Home() {
-  const { certs } = useStore();
+  const { certs, bls } = useStore();
   const fl = flStatus(certs);
   const ca = caStatus(certs);
   const path = shortestPath(certs);
   const general = fl.reqs.find((r) => r.key === 'general')!;
-  const blsDays = daysUntil(NURSE.blsExpires);
+  const blsDays = daysUntil(bls.expires);
   const uploaded = certs.some((c) => c.src === 'upload');
   const next = path.courses[0];
 
@@ -134,17 +134,21 @@ export default function Home() {
         {!uploaded && (
           <Alert tone="warn" title="A certificate from a conference is waiting" body="Add it so we can check which license it counts for." action="Add certificate" to="/certificates/add" />
         )}
-        <Alert
-          tone={blsDays < 90 ? 'bad' : 'warn'}
-          title={
-            blsDays < 0 ? 'BLS card expired' : blsDays === 0 ? 'BLS card expires today' : (
-              <>BLS card expires in <Text style={styles.mono}>{daysLabel(blsDays)}</Text></>
-            )
-          }
-          body={`Expires ${fmtDate(NURSE.blsExpires)}. Your employer requires a valid card to work shifts.`}
-          action="Start renewal"
-          to="/bls"
-        />
+        {bls.stage === 3 ? (
+          <Alert tone="info" title="BLS card renewed" body={`Valid until ${fmtDate(bls.expires)}.`} action="View" to="/bls" />
+        ) : (
+          <Alert
+            tone={blsDays < 90 ? 'bad' : 'warn'}
+            title={
+              blsDays < 0 ? 'BLS card expired' : blsDays === 0 ? 'BLS card expires today' : (
+                <>BLS card expires in <Text style={styles.mono}>{daysLabel(blsDays)}</Text></>
+              )
+            }
+            body={`Expires ${fmtDate(bls.expires)}. Your employer requires a valid card to work shifts.`}
+            action={bls.stage === 0 ? 'Start renewal' : 'Continue renewal'}
+            to="/bls"
+          />
+        )}
         <Alert tone="info" title="Florida audits licensees at random" body="Keep certificates for each cycle. Your certificates are all in one place." action="Certificates" to="/certificates" />
       </Card>
 

@@ -107,3 +107,6 @@ export const DEFAULT_AUTHOR = 'Rounds clinical faculty (sample)';
 export const NURSE_PLANNER = 'Lena Ortiz, DNP, RN (sample)';
 export const DISCLOSURES = 'None of the planners or authors have relevant financial relationships with ineligible companies (sample)';
 export const GENERIC_SECTIONS = ['Overview', 'Recognizing the signs', 'Responding and reporting', 'Case studies'];
+
+/** Only Prevention of Medical Errors has full lessons; other modules use the demo shortcut (as in the web prototype). */
+export const hasFullContent = (id: string) => id === 'med-errors';
