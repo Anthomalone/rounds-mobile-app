@@ -40,3 +40,20 @@ None. Platform (Expo) and in-memory state follow the decisions of 21 Nov 2026.
 - `npm run typecheck`: pass. `npm run lint`: pass. `npm test`: 10/10 pass (Florida 20/24 with Medical Errors + Impairment missing, California 18/30, path 4 courses 12 h, after Medical Errors 22/24 and 3 courses, complete path recommends nothing).
 - `npx expo-doctor`: 20/20 checks passed. `npx expo export --platform all`: done.
 - Browser at 375 wide: three tabs at the bottom; Home → Rules & sources shows all six rules with source links and "Checked 21 Nov 2026".
+- Plan step 5 said the store would also hold course progress; progress state arrives with F7 (lesson reader), where it is first used (codex #7).
+
+## Codex review
+
+Round 1, `VERDICT: FINDINGS(9)`. Decisions by Anthony, 21 Nov 2026.
+
+| # | Severity | Finding | Decision |
+|---|---|---|---|
+| 1 | BLOCKER | `npm test` fails on Node 24 (CI) when given a folder | Fixed: test script uses `src/logic/*.test.ts` |
+| 2 | MAJOR | Path said complete when no course was left even if a requirement was open | Fixed: complete only when Florida and California are complete; uncovered gaps listed; test added |
+| 3 | MAJOR | Certificates from earlier cycles still count | Dismissed: handoff logic (section 6) defines no cycle start; filtering would drop California from the agreed 18/30 and invent a rule |
+| 4 | MAJOR | California credit comes from the certificate flag, not the provider | Dismissed: same data model as the handoff and web prototype; the flag is set from the provider in seed data and the upload flow |
+| 5 | MAJOR | Same certificate added twice counts twice | Fixed: store ignores a repeated id or course |
+| 6 | MAJOR | Hours could be NaN | Dismissed: hours never come from user input, only fixed sample data |
+| 7 | MINOR | Store has no course progress yet | Fixed in the plan: progress arrives with F7 |
+| 8 | MINOR | Compact claim without a source link | Fixed: own rule linked to the Nurse Licensure Compact member map. The page loads; the state list is an interactive map, so California's non-member status still needs one human look |
+| 9 | MINOR | Source-link test passes with zero rules | Fixed: asserts the expected rule ids and official source hosts |
