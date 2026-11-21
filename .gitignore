@@ -12,3 +12,8 @@ web-build/
 
 # review scratch
 .review/
+expo-env.d.ts
+.metro-health-check*
+*.tsbuildinfo
+/ios
+/android
