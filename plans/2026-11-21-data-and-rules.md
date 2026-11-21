@@ -31,3 +31,12 @@ Home tiles, course flow, certificates, BLS (later features). No saving between a
 
 ## Questions
 None. Platform (Expo) and in-memory state follow the decisions of 21 Nov 2026.
+
+## Changes from the plan
+- Courses other than Prevention of Medical Errors will use the web prototype's "Complete module (demo shortcut)", so no new course content is invented (answers PRD open question 6).
+- Tab bar imports from `expo-router/js-tabs` (SDK 58 API: `navigateToTab`).
+
+## Verification
+- `npm run typecheck`: pass. `npm run lint`: pass. `npm test`: 10/10 pass (Florida 20/24 with Medical Errors + Impairment missing, California 18/30, path 4 courses 12 h, after Medical Errors 22/24 and 3 courses, complete path recommends nothing).
+- `npx expo-doctor`: 20/20 checks passed. `npx expo export --platform all`: done.
+- Browser at 375 wide: three tabs at the bottom; Home → Rules & sources shows all six rules with source links and "Checked 21 Nov 2026".
