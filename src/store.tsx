@@ -6,7 +6,8 @@ type State = { certs: Cert[] };
 
 type Store = State & {
   addCert: (c: Cert) => void;
-  updateCert: (id: string, patch: Partial<Cert>) => void;
+  // Only the CE Broker reporting status changes after a certificate is saved.
+  markReported: (id: string) => void;
 };
 
 const Ctx = createContext<Store | null>(null);
@@ -18,7 +19,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       certs,
       // Same id, or the same Rounds course twice, never counts twice.
       addCert: (c) => setCerts((prev) => (prev.some((x) => x.id === c.id || (!!c.course && x.course === c.course)) ? prev : [...prev, c])),
-      updateCert: (id, patch) => setCerts((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c))),
+      markReported: (id) => setCerts((prev) => prev.map((c) => (c.id === id ? { ...c, reported: true } : c))),
     }),
     [certs],
   );
