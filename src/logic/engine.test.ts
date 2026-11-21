@@ -51,6 +51,7 @@ test('after the whole path: everything complete, path recommends nothing', () =>
   const p = shortestPath(certs);
   assert.equal(p.complete, true);
   assert.equal(p.courses.length, 0);
+  assert.deepEqual(p.uncovered, []);
 });
 
 test('extra general hours never fill a required topic', () => {
@@ -79,9 +80,19 @@ test('days until a deadline and BLS end-of-month expiry', () => {
   assert.equal(exp.getDate(), 30);
 });
 
-test('every rule keeps an https source link', () => {
+test('every rule keeps an official source link', () => {
+  const official = /^https:\/\/(floridasnursing\.gov|cebroker\.com|rn\.ca\.gov|www\.nursingworld\.org|email\.nursingworld\.org|cpr\.heart\.org|www\.nursecompact\.com)\//;
+  assert.deepEqual(RULE_SOURCES.map((r) => r.id), ['fl-rn', 'fl-reporting', 'fl-groups', 'ca-rn', 'compact', 'awarding', 'bls']);
   for (const r of RULE_SOURCES) {
     assert.ok(r.sources.length > 0, r.id);
-    for (const s of r.sources) assert.match(s.url, /^https:\/\//);
+    for (const s of r.sources) assert.match(s.url, official, `${r.id}: ${s.url}`);
   }
+});
+
+test('path is not complete while a requirement has no course to close it', () => {
+  const noLaws = SEED_CERTS.filter((c) => c.fl !== 'laws');
+  const certs = [...noLaws, certFor('med-errors', 2, 'medErrors'), certFor('impairment', 2, 'impairment'), certFor('high-alert', 4, 'general'), certFor('delirium', 4, 'general')];
+  const p = shortestPath(certs);
+  assert.equal(p.complete, false);
+  assert.deepEqual(p.uncovered, ['Florida Laws & Rules']);
 });
