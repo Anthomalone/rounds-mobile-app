@@ -57,3 +57,14 @@ Round 1, `VERDICT: FINDINGS(9)`. Decisions by Anthony, 21 Nov 2026.
 | 7 | MINOR | Store has no course progress yet | Fixed in the plan: progress arrives with F7 |
 | 8 | MINOR | Compact claim without a source link | Fixed: own rule linked to the Nurse Licensure Compact member map. The page loads; the state list is an interactive map, so California's non-member status still needs one human look |
 | 9 | MINOR | Source-link test passes with zero rules | Fixed: asserts the expected rule ids and official source hosts |
+
+Round 2, `VERDICT: FINDINGS(4)`. Decisions by Anthony, 21 Nov 2026: fix all four.
+
+| # | Severity | Finding | Decision |
+|---|---|---|---|
+| 1 | MAJOR | `updateCert` could change an id and bypass the duplicate check | Fixed: replaced by `markReported`, the only change the app makes |
+| 2 | MAJOR | California card presented the CEP-only filter as the full state rule | Fixed: card says "Simplified for the demo" and points to the BRN page |
+| 3 | MINOR | Domestic Violence tagged as required while not due | Fixed: only topics due this cycle are required; test added |
+| 4 | MINOR | "Member map" link opens the Compact home page | Fixed: relabelled "Nurse Licensure Compact (official site)"; test renamed. California's status still needs one human look |
+
+Stopped after round 2: every finding fixed; remaining rounds would only re-check these small edits.
