@@ -39,7 +39,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/logic/"
+    "test": "node --test src/logic/*.test.ts"
   },
   "private": true
 }
