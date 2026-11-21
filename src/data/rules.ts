@@ -75,7 +75,7 @@ export const RULE_SOURCES: RuleEntry[] = [
     title: 'California RN: 30 hours every 2 years',
     state: 'CA',
     summary:
-      'Only courses from providers with a California BRN provider number (CEP) count. The BRN approves providers, not courses. Implicit bias (1 h) applies to newly licensed RNs. No state tracking system: nurses keep certificates in case of audit.',
+      'Simplified for the demo: Rounds counts only courses from providers with a California BRN provider number (CEP). See the BRN page for the full list of accepted sources. The BRN approves providers, not courses. Implicit bias (1 h) applies to newly licensed RNs. No state tracking system: nurses keep certificates in case of audit.',
     sources: [
       { label: 'California BRN, CE for renewal', url: 'https://rn.ca.gov/licensees/ce-renewal.shtml' },
       { label: 'California BRN, CEP provider number', url: 'https://rn.ca.gov/applicants/cep-lic.shtml' },
@@ -86,7 +86,7 @@ export const RULE_SOURCES: RuleEntry[] = [
     title: 'Florida multistate license and California',
     state: 'CA',
     summary: 'California is not a Nurse Licensure Compact state, so a Florida multistate (Compact) license doesn’t cover it. Jordan needs a separate California license.',
-    sources: [{ label: 'Nurse Licensure Compact, member map', url: 'https://www.nursecompact.com/map.page' }],
+    sources: [{ label: 'Nurse Licensure Compact (official site)', url: 'https://www.nursecompact.com/map.page' }],
   },
   {
     id: 'awarding',
