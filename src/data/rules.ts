@@ -82,6 +82,13 @@ export const RULE_SOURCES: RuleEntry[] = [
     ],
   },
   {
+    id: 'compact',
+    title: 'Florida multistate license and California',
+    state: 'CA',
+    summary: 'California is not a Nurse Licensure Compact state, so a Florida multistate (Compact) license doesn’t cover it. Jordan needs a separate California license.',
+    sources: [{ label: 'Nurse Licensure Compact, member map', url: 'https://www.nursecompact.com/map.page' }],
+  },
+  {
     id: 'awarding',
     title: 'Who can award contact hours',
     state: 'All',
@@ -106,4 +113,4 @@ export const RULE_SOURCES: RuleEntry[] = [
 ];
 
 export const NOT_CLAIMED =
-  'Not verified, so not claimed: California’s exact certificate-retention period (the app says “keep certificates in case of audit”) and California’s contact-hour minutes. California is not a Nurse Licensure Compact state, so a Florida multistate license doesn’t cover it.';
+  'Not verified, so not claimed: California’s exact certificate-retention period (the app says “keep certificates in case of audit”) and California’s contact-hour minutes.';
